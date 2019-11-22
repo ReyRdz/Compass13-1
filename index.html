@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Example 13-1</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" id="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;"/>
+<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+<script type="text/javascript" charset="utf-8">
+var hc;
+var pgr = false;
+var hasCompass = true;
+function onBodyLoad() { document.addEventListener("deviceready", onDeviceReady, false); }
+function onDeviceReady() { hc = document.getElementById('headingInfo'); pgr = true; }
+function getHeading() {
+if (pgr == true) {
+if (hasCompass == true) {
+hc.innerHTML = "Getting heading information from compass.";
+navigator.compass.getCurrentHeading( onHeadingSuccess, onHeadingError); } else {
+alert("No compass, please stop clicking the button.");}
+} else { alert("Please wait. PhoneGap is not ready.");}
+	}
+function onHeadingSuccess(heading) { var d = new Date(heading.timestamp);
+	hc.innerHTML = "<b>Magnetic Heading:</b> " + heading.magneticHeading + "<br /><b>True Heading:</b> " + heading.trueHeading + "<br /><b>Heading Accuracy:</b> " + heading.headingAccuracy + "<br /><b>Timestamp:</b> " + d.toLocaleString(); }
+function onHeadingError(compassError) {
+if (compassError.code == CompassError.COMPASS_NOT_SUPPORTED) {
+hc.innerHTML = "Compass not available." alert("Compass not supported.");
+hasCompass == false;
+} else if (compassError.code == CompassError.COMPASS_INTERNAL_ERR) {alert("Compass Internal Error");
+} else { alert("Unknown heading error!");}
+										}
+</script>
+</head>
+<body onload="onBodyLoad()">
+<h1>Example 13-1</h1>
+<p>This is an Apache PhoneGap application that measures device heading using the Compass API.<br />
+<input type="button" value="Measure Heading" onclick="getHeading();"></p>
+<p id="headingInfo">Nothing to see here (yet), click the button.</p>
+</body>
+</html>
